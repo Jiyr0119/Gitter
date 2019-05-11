@@ -87,7 +87,7 @@ class App extends Component {
   componentDidMount () {
     this.updateApp()
     wx.cloud.init({
-      env: 'gitter-33fa2c',
+      env: 'gitter-neq0p',
       traceUser: true
     })
     this.loadOpenId()

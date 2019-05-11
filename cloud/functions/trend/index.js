@@ -1,16 +1,28 @@
 const cache = require('memory-cache')
 
-const { fetchRepositories, fetchDevelopers } = require('./fetch')
+const {
+  fetchRepositories,
+  fetchDevelopers
+} = require('./fetch')
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
 
-cloud.init()
+
+cloud.init({
+  traceUser: true,
+  env: 'gitter-neq0p'
+})
+
 
 const db = cloud.database()
 
 // 云函数入口函数
-exports.main = async (event, context) => {
-  const { type, language, since } = event
+exports.main = async(event, context) => {
+  const {
+    type,
+    language,
+    since
+  } = event
   let res = null;
   let date = new Date()
   if (type === 'repositories') {
@@ -21,10 +33,13 @@ exports.main = async (event, context) => {
     }).orderBy('cacheDate', 'desc').get()
     console.log('cacheData', cacheData)
     if (cacheData.data.length !== 0 &&
-      ((date.getTime() - cacheData.data[0].cacheDate)  < 1800 * 1000)) {
+      ((date.getTime() - cacheData.data[0].cacheDate) < 1800 * 1000)) {
       res = JSON.parse(cacheData.data[0].content)
     } else {
-      res = await fetchRepositories({ language, since });
+      res = await fetchRepositories({
+        language,
+        since
+      });
       if (res && res.length > 0) {
         await db.collection('repositories').add({
           data: {
@@ -41,10 +56,13 @@ exports.main = async (event, context) => {
       cacheKey: cacheKey
     }).orderBy('cacheDate', 'desc').get()
     if (cacheData.data.length !== 0 &&
-      ((date.getTime() - cacheData.data[0].cacheDate)  < 1800 * 1000)) {
+      ((date.getTime() - cacheData.data[0].cacheDate) < 1800 * 1000)) {
       res = JSON.parse(cacheData.data[0].content)
     } else {
-      res = await fetchDevelopers({ language, since });
+      res = await fetchDevelopers({
+        language,
+        since
+      });
       if (res && res.length > 0) {
         await db.collection('developers').add({
           data: {

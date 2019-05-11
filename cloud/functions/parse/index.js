@@ -5,7 +5,10 @@ const Towxml = require('towxml');
 
 const towxml = new Towxml();
 
-cloud.init()
+cloud.init({
+  traceUser: true,
+  env: 'gitter-neq0p'
+})
 
 // 云函数入口函数
 exports.main = async (event, context) => {

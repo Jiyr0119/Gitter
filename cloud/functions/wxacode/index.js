@@ -3,7 +3,10 @@ const cloud = require('wx-server-sdk')
 
 const { fetchAccessToken, fetchACode } = require('./fetch')
 
-cloud.init()
+cloud.init({
+  traceUser: true,
+  env: 'gitter-neq0p'
+})
 
 const db = cloud.database()
 
